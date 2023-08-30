@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // - Roles
 // - AccountStatus
 
-const { Schema, model } = mongoose;
+const { model, Schema } = mongoose;
 
 const UserSchema = new Schema({
   name: String,
