@@ -14,7 +14,7 @@ const profileSchema = new Schema({
   phoneNo: String,
   avatar: String,
   User: {
-    type: Schema.type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
   },
 });
