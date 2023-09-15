@@ -1,5 +1,5 @@
 const express = require("express");
-
+const bcrypt = require("bcryptjs");
 const app = express();
 
 const connectDb = require("./db");
@@ -38,6 +38,10 @@ app.post("/register", async (req, res) => {
     return res.status(400).json({ message: "User already axist" });
   }
   user = new User({ name, email, password });
+
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  user.password = hash;
   user.save();
   return res.status(201).json({ message: "user created Successfully", user });
 });
@@ -52,7 +56,7 @@ app.get("/", (req, res) => {
 connectDb("mongodb://127.0.0.1:27017/AttendaceSystem")
   .then(() => {
     console.log("database connected");
-    app.listen("4000", () => {
+    app.listen(4000, () => {
       console.log("i am listening to 4000 port");
     });
   })
