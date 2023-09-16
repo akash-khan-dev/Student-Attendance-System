@@ -1,12 +1,11 @@
 const express = require("express");
 const app = express();
-const { registerController, loginController } = require("./controller/auth");
 const authorization = require("./Middelware/authentication");
 const connectDb = require("./db");
 app.use(express.json());
+const routes = require("./routes/index");
 
-app.post("/register", registerController);
-app.post("/login", loginController);
+app.use(routes);
 
 // global error handle
 app.use((err, _req, res, _nex) => {
