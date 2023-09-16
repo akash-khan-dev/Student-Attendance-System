@@ -1,6 +1,9 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const app = express();
+
+const authorization = require("./Middelware/authentication");
 
 const connectDb = require("./db");
 app.use(express.json());
@@ -74,30 +77,40 @@ app.post("/login", async (req, res, next) => {
     if (!user) {
       return res.status(400).json({ message: "User Credential" });
     }
+
     // password validation
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       res.status(400).json({ message: "User Credential" });
     }
-    return res.status(200).json({ message: "Login Successful" });
+    // not show user password
+    delete user._doc.password;
+
+    const token = jwt.sign(user._doc, "secretKey", { expiresIn: "2h" });
+    // return successfull
+    return res.status(200).json({ token });
   } catch (e) {
     next(e);
   }
 });
 
 // global error handle
-app.use((err, req, res, nex) => {
+app.use((err, _req, res, _nex) => {
   console.log(err);
   res.status(500).json({ message: "Server Error Occure" });
 });
-// app.get("/", (req, res) => {
-//   const obj = {
-//     name: "akash",
-//     email: "akash@exmple.com",
-//   };
-//   res.json(obj);
-// });
 
+// giv json token
+// create private route
+app.get("/private", authorization, async (req, res, next) => {
+  res.status(200).json({ message: "this is private" });
+  console.log(`i am user ${req.user}`);
+});
+
+// create public route
+app.get("/public", (req, res, next) => {
+  res.status(400).json({ message: "this is public" });
+});
 // mongoose connection
 connectDb("mongodb://127.0.0.1:27017/AttendaceSystem")
   .then(() => {
