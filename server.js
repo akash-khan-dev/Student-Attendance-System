@@ -1,15 +1,9 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const app = express();
-
 const { registerController, loginController } = require("./controller/auth");
-
 const authorization = require("./Middelware/authentication");
-
 const connectDb = require("./db");
 app.use(express.json());
-const User = require("./models/User");
 
 app.post("/register", registerController);
 app.post("/login", loginController);
