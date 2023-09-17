@@ -1,7 +1,6 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const registerController = async (req, res) => {
+const { registerService, loginService } = require("../service/auth");
+
+const registerController = async (req, res, next) => {
   /**
      *request Input sources
      -req body
@@ -16,19 +15,8 @@ const registerController = async (req, res) => {
     return res.status(400).json({ message: "please full fill the data" });
   }
   try {
-    // find email like new email axist in before database
-    let user = await User.findOne({ email: email });
-    if (user) {
-      return res.status(400).json({ message: "User already axist" });
-    }
-    //new user create
-    user = new User({ name, email, password });
-    //password hashing
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-
-    user.password = hash;
-    user.save();
+    //validation
+    const user = await registerService(name, email, password);
     return res.status(201).json({ message: "user created Successfully", user });
   } catch (e) {
     next(e);
@@ -39,22 +27,9 @@ const loginController = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // email validation
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "User Credential" });
-    }
-
-    // password validation
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      res.status(400).json({ message: "User Credential" });
-    }
-    // not show user password
-    delete user._doc.password;
-
-    const token = jwt.sign(user._doc, "secretKey", { expiresIn: "2h" });
+    const token = await loginService({ email, password });
     // return successfull
-    return res.status(200).json({ token });
+    return res.status(200).json({ message: "login successful", token });
   } catch (e) {
     next(e);
   }
