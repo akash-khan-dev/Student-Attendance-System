@@ -27,7 +27,7 @@ const loginController = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // email validation
-    const token = await loginService({ email, password });
+    const token = await loginService(email, password);
     // return successfull
     return res.status(200).json({ message: "login successful", token });
   } catch (e) {

@@ -9,8 +9,9 @@ app.use(routes);
 
 // global error handle
 app.use((err, _req, res, _nex) => {
-  console.log(err);
-  res.status(500).json({ message: "Server Error Occure" });
+  const message = err.message ? err.message : "Server Error Occure";
+  const status = err.status ? err.status : 500;
+  res.status(status).json({ message });
 });
 
 // giv json token

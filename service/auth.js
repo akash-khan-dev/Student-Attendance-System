@@ -2,13 +2,12 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { findUserProperty, createNewUser } = require("./user");
+const Costomerror = require("../utils/customError");
 const registerService = async (name, email, password) => {
   // find email like new email axist in before database
   let user = await findUserProperty("email", email);
   if (user) {
-    const error = new Error("User already axist");
-    error.status = 400;
-    throw error;
+    throw Costomerror("User already axist", 400);
   }
   //password hashing\
   const salt = await bcrypt.genSalt(10);
@@ -17,21 +16,26 @@ const registerService = async (name, email, password) => {
   return createNewUser({ name, email, password: hash });
 };
 // login service
-const loginService = async () => {
-  const user = await User.findOne({ email });
+const loginService = async (email, password) => {
+  const user = await findUserProperty("email", email);
   if (!user) {
-    return res.status(400).json({ message: "User Credential" });
+    throw Costomerror("User Credential", 400);
   }
 
   // password validation
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    res.status(400).json({ message: "User Credential" });
+    throw Costomerror("User Credential", 400);
   }
-  // not show user password
-  delete user._doc.password;
+  const payload = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    roles: user.roles,
+    accountStatus: user.accountStatus,
+  };
 
-  const token = jwt.sign(user._doc, "secretKey", { expiresIn: "2h" });
+  return jwt.sign(payload, "secretKey", { expiresIn: "2h" });
 };
 
 module.exports = {
