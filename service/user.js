@@ -1,5 +1,9 @@
 const User = require("../models/User");
 
+const findUsers = () => {
+  return User.find();
+};
+
 const findUserProperty = (key, value) => {
   if (key === "_id") {
     return User.findById(value);
@@ -14,4 +18,5 @@ const createNewUser = ({ name, email, password }) => {
 module.exports = {
   findUserProperty,
   createNewUser,
+  findUsers,
 };
