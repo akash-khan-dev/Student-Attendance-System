@@ -12,6 +12,7 @@ async function authorization(req, res, next) {
     token = token.split(" ")[1];
     // matching user token
     const decoded = jwt.verify(token, "secretKey");
+
     //find user id
     const user = await User.findById(decoded._id);
     if (!user) {

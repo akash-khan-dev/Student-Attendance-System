@@ -5,6 +5,7 @@ const connectDb = require("./db");
 app.use(express.json());
 const routes = require("./routes/index");
 
+//register and login router
 app.use(routes);
 
 // global error handle
