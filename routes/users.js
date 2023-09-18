@@ -1,11 +1,11 @@
 const route = require("express").Router();
-const { getUsers } = require("../controller/users");
+const { getUsers, getUsersID } = require("../controller/users");
 
 /**
  *@Method GET
  * Get user by id or email
  */
-route.get("/:userId");
+route.get("/:userId", getUsersID);
 
 /**
  * Update user by id
