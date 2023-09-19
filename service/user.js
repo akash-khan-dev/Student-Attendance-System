@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const error = require("../utils/customError");
 // for find all user
 const findUsers = () => {
   return User.find();
@@ -29,8 +30,19 @@ const createNewUser = ({ name, email, password, roles, accountStatus }) => {
 // const deleteUser = (id) => {
 //   User.findOneAndDelete(id);
 // };
+
+//update user by id
+const updateUser = async (id, data) => {
+  const user = await findUserProperty("email", data.email);
+  if (user) {
+    throw error("Email Already axis", 404);
+  }
+  return User.findByIdAndUpdate(id, { ...data }, { new: true });
+};
+
 module.exports = {
   findUserProperty,
   createNewUser,
   findUsers,
+  updateUser,
 };

@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const { findUsers, findUserProperty } = require("../service/user");
+const { findUsers, findUserProperty, updateUser } = require("../service/user");
 const customError = require("../utils/customError");
 const authService = require("../service/auth");
 //get all users
@@ -38,6 +38,23 @@ const postUser = async (req, res, next) => {
       accountStatus
     );
     return res.status(201).json(user);
+  } catch (e) {
+    next(e);
+  }
+};
+
+//update user by id
+const putUserById = async (req, res, next) => {
+  const userId = req.params.userId;
+  const { name, email, roles, accountStatus } = req.body;
+  try {
+    const user = await updateUser(userId, {
+      name,
+      email,
+      roles,
+      accountStatus,
+    });
+    return res.status(200).json(user);
   } catch (e) {
     next(e);
   }
@@ -84,4 +101,5 @@ module.exports = {
   postUser,
   deleteUser,
   patchUserById,
+  putUserById,
 };

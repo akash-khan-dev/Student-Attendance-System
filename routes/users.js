@@ -5,6 +5,7 @@ const {
   postUser,
   deleteUser,
   patchUserById,
+  putUserById,
 } = require("../controller/users");
 
 /**
@@ -17,7 +18,7 @@ route.get("/:userId", getUsersID);
  * Update user by id
  * @Method PUT
  */
-route.put("/:userId");
+route.put("/:userId", putUserById);
 
 /**
  * Update user by id
