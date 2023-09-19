@@ -25,6 +25,8 @@ const getUsersID = async (req, res, next) => {
     next(e);
   }
 };
+
+//create users
 const postUser = async (req, res, next) => {
   const { name, email, password, roles, accountStatus } = req.body;
   try {
@@ -40,8 +42,26 @@ const postUser = async (req, res, next) => {
     next(e);
   }
 };
+
+// delete user
+const deleteUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  try {
+    const user = await findUserProperty("_id", userId);
+    if (!user) {
+      throw customError("User Not Found", 404);
+    }
+    // TODO: call delete user all service
+
+    user.deleteOne();
+    return res.status(200).json("user deleted");
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   getUsers,
   getUsersID,
   postUser,
+  deleteUser,
 };

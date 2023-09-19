@@ -1,5 +1,10 @@
 const route = require("express").Router();
-const { getUsers, getUsersID, postUser } = require("../controller/users");
+const {
+  getUsers,
+  getUsersID,
+  postUser,
+  deleteUser,
+} = require("../controller/users");
 
 /**
  *@Method GET
@@ -18,6 +23,8 @@ route.put("/:userId");
  * Method PATCH
  */
 route.patch("/userId");
+
+route.delete("/:userId", deleteUser);
 /*
  * get all users,include
  * filter
