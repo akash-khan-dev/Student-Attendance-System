@@ -1,5 +1,5 @@
 const route = require("express").Router();
-const { getUsers, getUsersID } = require("../controller/users");
+const { getUsers, getUsersID, postUser } = require("../controller/users");
 
 /**
  *@Method GET
@@ -29,4 +29,9 @@ route.patch("/userId");
  * @visibility private
  */
 route.get("/", getUsers);
+
+/**
+ * create new user
+ */
+route.post("/", postUser);
 module.exports = route;

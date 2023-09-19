@@ -2,7 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { findUserProperty, createNewUser } = require("./user");
 const Costomerror = require("../utils/customError");
-const registerService = async (name, email, password) => {
+
+const registerService = async (name, email, password, roles, accountStatus) => {
   // find email like new email axist in before database
   let user = await findUserProperty("email", email);
   if (user) {
@@ -12,7 +13,7 @@ const registerService = async (name, email, password) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
   //new user create
-  return createNewUser({ name, email, password: hash });
+  return createNewUser({ name, email, password: hash, roles, accountStatus });
 };
 // login service
 const loginService = async (email, password) => {

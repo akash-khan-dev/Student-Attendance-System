@@ -1,7 +1,8 @@
 const User = require("../models/User");
 const { findUsers, findUserProperty } = require("../service/user");
 const customError = require("../utils/customError");
-
+const authService = require("../service/auth");
+//get all users
 const getUsers = async (req, res, nex) => {
   try {
     const user = await findUsers();
@@ -10,7 +11,7 @@ const getUsers = async (req, res, nex) => {
     nex(e);
   }
 };
-
+//get single user
 const getUsersID = async (req, res, next) => {
   const userid = req.params.userId;
   console.log(userid);
@@ -24,7 +25,23 @@ const getUsersID = async (req, res, next) => {
     next(e);
   }
 };
+const postUser = async (req, res, next) => {
+  const { name, email, password, roles, accountStatus } = req.body;
+  try {
+    const user = await authService.registerService(
+      name,
+      email,
+      password,
+      roles,
+      accountStatus
+    );
+    return res.status(201).json(user);
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   getUsers,
   getUsersID,
+  postUser,
 };
