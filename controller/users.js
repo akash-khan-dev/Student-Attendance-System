@@ -43,6 +43,25 @@ const postUser = async (req, res, next) => {
   }
 };
 
+// update user by id
+
+const patchUserById = async (req, res, next) => {
+  const userId = req.params.userId;
+  const { name, roles, accountStatus } = req.body;
+  try {
+    const user = await findUserProperty("_id", userId);
+    if (!user) {
+      throw customError("User Not Found", 404);
+    }
+    user.name = name ?? user.name;
+    user.roles = roles ?? user.roles;
+    user.accountStatus = accountStatus ?? user.accountStatus;
+    user.save();
+    return res.status(203).json(user);
+  } catch (e) {
+    next(e);
+  }
+};
 // delete user
 const deleteUser = async (req, res, next) => {
   const userId = req.params.userId;
@@ -54,7 +73,7 @@ const deleteUser = async (req, res, next) => {
     // TODO: call delete user all service
 
     user.deleteOne();
-    return res.status(200).json("user deleted");
+    return res.status(203).send();
   } catch (e) {
     next(e);
   }
@@ -64,4 +83,5 @@ module.exports = {
   getUsersID,
   postUser,
   deleteUser,
+  patchUserById,
 };

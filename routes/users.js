@@ -4,6 +4,7 @@ const {
   getUsersID,
   postUser,
   deleteUser,
+  patchUserById,
 } = require("../controller/users");
 
 /**
@@ -22,7 +23,7 @@ route.put("/:userId");
  * Update user by id
  * Method PATCH
  */
-route.patch("/userId");
+route.patch("/:userId", patchUserById);
 
 route.delete("/:userId", deleteUser);
 /*
