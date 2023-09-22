@@ -11,6 +11,7 @@ const registerController = async (req, res, next) => {
      */
   // user information
   const { name, email, password } = req.body;
+
   if (!name || !email || !password) {
     return res.status(400).json({ message: "please full fill the data" });
   }

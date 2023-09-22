@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const authorization = require("./Middelware/authentication");
+const authorization = require("./Middleware/authentication");
 const connectDb = require("./db");
 app.use(express.json());
 const routes = require("./routes/index");
@@ -27,7 +27,7 @@ app.get("/public", (req, res, next) => {
   res.status(400).json({ message: "this is public" });
 });
 // mongoose connection
-connectDb("mongodb://127.0.0.1:27017/AttendaceSystem")
+connectDb("mongodb://127.0.0.1:27017/AttendanceSystem")
   .then(() => {
     console.log("database connected");
     app.listen(4000, () => {

@@ -14,7 +14,6 @@ const getUsers = async (req, res, nex) => {
 //get single user
 const getUsersID = async (req, res, next) => {
   const userid = req.params.userId;
-  console.log(userid);
   try {
     const user = await findUserProperty("_id", userid);
     if (!user) {
